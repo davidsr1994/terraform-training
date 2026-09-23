@@ -19,3 +19,13 @@ variable "welcome_message" {
   type        = string
   default     = null
 }
+
+variable "labels" {
+  type        = map(string) # name => hex color
+  description = "Issue labels to manage on the repo."
+}
+
+variable "enable_release_label" {
+  type    = bool
+  default = false
+}

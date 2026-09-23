@@ -17,8 +17,19 @@ locals {
 }
 
 resource "github_issue_label" "labels" {
-  for_each   = toset(local.common_labels)
+  for_each   = var.labels
   repository = github_repository.course_repo.name
-  name       = each.value
-  color      = "ededed"
+  name       = each.key
+  color      = each.value
+}
+
+resource "github_issue_label" "release" {
+  count      = var.enable_release_label ? 1 : 0
+  repository = github_repository.course_repo.name
+  name       = "release"
+  color      = "0e8a16"
+}
+
+locals {
+  label_names_upper = [for name in keys(var.labels) : upper(name)]
 }

@@ -5,7 +5,7 @@ variable "prefix" {
 
 variable "location" {
   type    = string
-  default = "westeurope"
+  default = "spaincentral"
 }
 
 locals {

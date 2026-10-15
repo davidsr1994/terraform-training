@@ -7,15 +7,14 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "david-terraform-state-rg"
-    storage_account_name = "davidtfstate"
+    resource_group_name  = "drodrigues-terraform-state-rg"
+    storage_account_name = "drodriguestfstate"
     container_name       = "terraform"
-    key                  = "david.tfstate"
-    use_azuread_auth     = true # authenticate to the state with Azure AD, not an access key
+    key                  = "drodrigues.tfstate"
   }
 }
 
 provider "azurerm" {
-  subscription_id = "c0fc8d1b-6806-4cbc-9a57-8f36f1e6331d"
+  subscription_id = "49175c01-02a7-44bb-b379-2c06f4aae5b4"
   features {}
 }

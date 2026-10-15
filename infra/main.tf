@@ -1,5 +1,7 @@
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_resource_group" "network" {
-  name     = "david-net-rg"
+  name     = "drodrigues-net-rg"
   location = var.location
 
   tags = merge(local.common_tags, {
@@ -12,7 +14,7 @@ resource "azurerm_resource_group" "network" {
 }
 
 resource "azurerm_resource_group" "application" {
-  name     = "david-app-rg"
+  name     = "drodrigues-app-rg"
   location = var.location
 
   tags = merge(local.common_tags, {
@@ -25,7 +27,7 @@ resource "azurerm_resource_group" "application" {
 }
 
 resource "azurerm_resource_group" "database" {
-  name     = "david-db-rg"
+  name     = "drodrigues-db-rg"
   location = var.location
 
   tags = merge(local.common_tags, {
@@ -43,7 +45,14 @@ resource "azurerm_virtual_network" "network" {
   resource_group_name = azurerm_resource_group.network.name
   address_space       = ["10.20.30.0/24"]
 
-  tags = local.common_tags
+  tags = {
+    for key, value in local.common_tags : key => value
+    if key != "owner"
+  }
+
+  lifecycle {
+    ignore_changes = [tags["owner"]]
+  }
 }
 
 resource "azurerm_subnet" "app" {

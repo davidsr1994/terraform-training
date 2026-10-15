@@ -8,9 +8,13 @@ variable "location" {
   default = "spaincentral"
 }
 
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
 locals {
   common_tags = {
     environment = "prod"
-    owner       = var.prefix
   }
 }

@@ -1,5 +1,36 @@
 data "azurerm_client_config" "current" {}
 
+data "azurerm_resource_group" "key_vault" {
+  name = "drodrigues-terraform-state-rg"
+}
+
+import {
+  to = azurerm_key_vault.kv
+  id = "/subscriptions/49175c01-02a7-44bb-b379-2c06f4aae5b4/resourceGroups/drodrigues-terraform-state-rg/providers/Microsoft.KeyVault/vaults/drodrigues-kv"
+}
+
+resource "azurerm_key_vault" "kv" {
+  name                      = "${var.prefix}-kv"
+  location                  = "spaincentral"
+  resource_group_name       = data.azurerm_resource_group.key_vault.name
+  tenant_id                 = data.azurerm_client_config.current.tenant_id
+  sku_name                  = "standard"
+  rbac_authorization_enabled = true
+}
+
+resource "azurerm_key_vault_secret" "kv_secret" {
+  name         = "db-password"
+  value        = var.db_password
+  key_vault_id = azurerm_key_vault.kv.id
+  depends_on   = [azurerm_role_assignment.kv_officer]
+}
+
+resource "azurerm_role_assignment" "kv_officer" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
 resource "azurerm_resource_group" "network" {
   name     = "drodrigues-net-rg"
   location = var.location

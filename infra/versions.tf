@@ -10,10 +10,12 @@ terraform {
     storage_account_name = "drodriguestfstate"
     container_name       = "terraform"
     key                  = "drodrigues-infra.tfstate"
+    use_oidc             = true
   }
 }
 
 provider "azurerm" {
   subscription_id = "49175c01-02a7-44bb-b379-2c06f4aae5b4"
+  use_oidc        = true
   features {}
 }
